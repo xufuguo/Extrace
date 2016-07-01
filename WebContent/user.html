@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8	" />
+	<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<title>UserInfo</title>
+	<link rel="stylesheet" type="text/css" href="jquery-easyui-1.4.5/themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="jquery-easyui-1.4.5/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="jquery-easyui-1.4.5/themes/metro/easyui.css">
+	<link rel="stylesheet" type="text/css" href="jquery-easyui-1.4.5/themes/mobile.css">
+	<link rel="stylesheet" type="text/css" href="jquery-easyui-1.4.5/themes/mobile.css">
+	<link rel="stylesheet" type="text/css" href="jquery-easyui-1.4.5/themes/icon.css">
+	<script type="text/javascript" src="jquery-easyui-1.4.5/jquery.min.js"></script>
+	<script type="text/javascript" src="jquery-easyui-1.4.5/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="jquery-easyui-1.4.5/jquery.easyui.mobile.js"></script>
+	<script type="text/javascript" src="js/getUrlParam.js"></script>
+	<script type="text/javascript" src="js/user.js"></script>
+
+</head>
+<body>
+	<div class="easyui-navpanel" style="position:relative;padding:20px">
+		<header>
+			<div class="m-toolbar">
+				<div class="m-title">UserInfo</div>
+				<div class="m-right">
+				    <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-reload'" onclick="load()"> Load</a>
+					<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove'" onclick="clean()" >Reset</a>
+					<a  href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="save()">Save</a>
+				</div>
+			</div>
+		</header>
+		<form id="ff" method="POST">
+		  <div>
+		       <table cellpadding="5" align="center">
+	    		
+	    		<tr>
+	    			<td>用户ID:</td>
+	    			<td><input class="easyui-numberbox" 
+	    			           id="UID" name="UID" 
+	    			           prompt="输入ID点击load获取用户数据"
+	    			           data-options="panelWidth:220,panelHeight:240,iconWidth:30" ></input>
+	    		   </td>
+	    		</tr>
+	    		<tr>
+	    			<td>密码:</td>
+	    			<td><input class="easyui-textbox" 
+	    			           type="password" id="PWD" name="PWD"  
+	    			           prompt="Password" ></input>
+	    			</td>
+	    		</tr>
+	    		<tr>
+	    			<td>名字:</td>
+	    			<td><input class="easyui-textbox" 
+	    			           id="Name" name="Name" prompt="Full name"></input>
+	    			</td>
+	    		</tr>
+	    		<tr>
+	    			<td>电话:</td>	    			  
+  					<td><input class="easyui-numberbox" 
+  					           id="TelCode" name="TelCode" prompt="number "></input>  
+  				    </td>  
+  				</tr>
+  				 <tr>
+	    			<td>URull:</td>	    			  
+  					<td><input class="easyui-numberbox"
+  					           id="URull" name="URull" prompt="Number" 
+  					           data-options="editable:false"></input>  
+  				    </td>  
+  				</tr>
+  				<tr>  
+  					<td>用户角色:</td>	       
+  					<td><input class="easyui-textbox" 
+  					           id="Status" name="Status"  prompt="0" 
+  					           data-options="editable:false"></input>
+  				    </td>	
+  			    </tr>  
+  			    <tr>    
+  					<td>转运节点:</td>   
+  					<td><input class="easyui-numberbox" 
+  					           id="DptID" name="DptID" prompt="Number" 
+  					           data-options="editable:false,panelWidth:220,panelHeight:240,iconWidth:30" ></input>
+  					</td>
+  					
+	    	    </tr>
+	    	    <tr>
+	    			<td>揽收包裹Id:</td>
+	    			<td><input class="easyui-numberbox" 
+	    			           id="ReceivePackageId" name="ReceivePackageId" prompt="Number" 
+	    			           data-options="editable:false,panelWidth:220,panelHeight:240,iconWidth:30" ></input>
+	    			</td>
+	    		</tr>
+	    		<tr>
+	    			<td>派送包裹Id:</td>
+	    			<td><input class="easyui-numberbox" 
+	    			           id="DelivePackageId" name="DelivePackageId" prompt="Number" 
+	    			           data-options="editable:false,panelWidth:220,panelHeight:240,iconWidth:30"></input>
+	    			</td>
+	    		</tr>
+	    		<tr>
+	    			<td>转运包裹Id:</td>
+	    			<td><input class="easyui-numberbox" 
+	    			           id="TransPackageId" name="TransPackageId" prompt="Number" 
+	    			           data-options="editable:false,panelWidth:220,panelHeight:240,iconWidth:30"></input>
+	    			</td>
+	    		</tr>
+	    	</table>    
+	    	            
+		  </div>
+		
+	    
+	    
+		</form>
+	</div>
+	<style scoped>
+		form label{
+			display: block;
+			margin: 10px 0 5px 0;
+		}
+	</style>
+</body>
+</html>

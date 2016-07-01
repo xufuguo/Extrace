@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>删除节点</title>
+<link rel="stylesheet" type="text/css" href="jquery-easyui-1.4.5/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="jquery-easyui-1.4.5/themes/icon.css">
+
+<script type="text/javascript" src="jquery-easyui-1.4.5/jquery.min.js"></script>
+<script type="text/javascript" src="jquery-easyui-1.4.5/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="jquery-easyui-1.4.5/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="jquery-easyui-1.4.5/jquery.easyui.mobile.js"></script>
+<script type="text/javascript" src="js/deleteTrans.js"></script>
+<style type="text/css">
+	html,body{
+		width: 100%;
+    	height:100%;
+    	margin: 0 auto;
+	}
+	#main1{
+		padding-top: 50px;
+	}
+	#left1{
+		
+		float: left;
+	}
+	#dg{
+		width: 60%;
+		float: left;
+		margin-top: 50px;
+		display: block;
+	}
+	#right1{
+		padding-top: 50px;
+		float: right;
+	
+</style>
+<script type="text/javascript">
+
+
+//下拉框选择控件，下拉框的内容是动态查询数据库信息,插入到邮政编码中
+$(function(){
+	$('#s_province').combobox({ 
+	    //url:"./json/region.json",
+	    url:'REST/REST/Misc/getProvinceList',
+	    method:"GET",
+	    editable:false, //不可编辑状态
+	    cache: false,
+	    // panelHeight: 'auto',//自动高度适合
+	    valueField:'Code',   
+	    textField:'Name',
+	    
+	    onHidePanel: function() {
+	        $('#s_city').combobox('setValue','');
+	        $('#s_county').combobox('setValue','');
+	        var province = $('#s_province').combobox('getValue');
+	        //alert(province);
+	        if(province!=''){
+	            $.ajax({
+	                type: 'GET',
+	                url: 'REST/REST/Misc/getCityList/'+province,
+	                cache: false,
+	                dataType : 'json',
+	                success: function(data){
+	                    //alert("aaaa");
+	                    //alert(data);
+	                    $('#s_city').combobox('loadData',data);
+	                     
+	                }
+	            });     
+	        }
+	    } 
+
+	});
+
+	$('#s_city').combobox({ 
+
+	    editable:false, //不可编辑状态
+	    cache: false,
+	    //panelHeight: 'auto',//自动高度适合
+	    valueField:'Code',   
+	    textField:'Name',
+	    onHidePanel: function(){
+	        $('#s_county').combobox('setValue','');
+	        var city = $('#s_city').combobox('getValue');
+	        //alert("211");
+	        //alert(city);       
+	        if(city!=''){
+	            $.ajax({
+	                type: 'GET',
+	                url: 'REST/REST/Misc/getTownList/'+city,
+	                cache: false,
+	                dataType : 'json',
+	                success: function(data){
+	                    $("#s_county").combobox("loadData",data);
+	                }
+	            });     
+	        }else{
+	        	$('#regioncode').textbox('getValue');
+	        	$('#regioncode').textbox('clear');
+	        }
+	    }
+	});  
+
+	$('#s_county').combobox({ 
+	   
+	    editable:false, //不可编辑状态
+	    cache: false,
+	    // panelHeight: 'auto',//自动高度适合
+	    valueField:'Code',   
+	    textField:'Name',
+	    onHidePanel: function(){
+	    	var county = $('#s_county').combobox('getValue');       
+	        if(county!=''){
+	           
+	           $('#regioncode').textbox('setValue',county);
+	           // alert("liushuo");
+	        }else{
+	           $('#regioncode').textbox('clear');
+	        }
+	    }
+	}); 
+	
+	
+
+});
+      
+
+</script>
+
+
+</head>
+<body>
+<div  id="deletetran"  style="width:100%;height:100%">
+    <input type="hidden" id="hidden_html" name="hidden_html"/>
+    <div  region="center" class="easyui-panel"  title="删除节点" style="width:100%;height:100%" >
+        <div id="left1" style="width:40%">
+	        <table cellpadding="5" align="center">
+	    	    <tr>
+    			    <td>省:</td>	    			  
+					<td><input class="easyui-textbox"   id="s_province" ></td>  
+				</tr>
+				<tr>  
+					<td>市:</td>	       
+					<td><input class="easyui-textbox"  id="s_city" ></td>	
+			    </tr>  
+			    <tr>    
+					<td>县区:</td>   
+					<td><input class="easyui-textbox"   id="s_county"  ></td>
+						
+	    	    </tr>
+	    		<tr>
+    		        <td>
+    	                <a href="#" class="easyui-linkbutton" 
+    	                       iconCls="icon-search" plain="true" 
+    	                       onclick="doSearch()">Search</a>
+    	            </td>
+    			    <td>
+    			        <form id="search" name="search" method="GET">
+    			            <input class="easyui-textbox" 
+    			                    type="text" name="regioncode" id="regioncode" 
+    			                    readonly="readonly">
+    			            </input>
+    		            </form>
+    	            </td>
+	    	    </tr>
+	    	</table>
+		</div>
+		<div id="rignt1" >
+	    	<table id="dg" align="center"></table> 
+	    </div> 
+	</div>
+  </div>
+  
+
+</body>
+</html>

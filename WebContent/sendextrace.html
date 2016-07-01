@@ -1,0 +1,227 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css"
+	href="jquery-easyui-1.4.5/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css"
+	href="jquery-easyui-1.4.5/themes/icon.css">
+<link rel="stylesheet" type="text/css"
+	href="jquery-easyui-1.4.5/demo/demo.css">
+<script type="text/javascript"
+	src="jquery-easyui-1.4.5/jquery.min.js"></script>
+<script type="text/javascript"
+	src="jquery-easyui-1.4.5/jquery.easyui.min.js"></script>
+<script type="text/javascript"
+	src="jquery-easyui-1.4.5/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="js/send.js"></script>
+<script type="text/javascript"
+	src="http://api.map.baidu.com/api?v=2.0&ak=78f9UcOm8vtUMbdxP4ZqibRcBKy9lrS2">
+	//v2.0版本的引用方式：src="http://api.map.baidu.com/api?v=2.0&ak=您的密钥"
+	//v1.4版本及以前版本的引用方式：src="http://api.map.baidu.com/api?v=1.4&key=您的密钥&callback=initialize"
+</script>
+<script>
+	var $j = jQuery.noConflict();
+	function submitForm() {
+		$j('#sendextracefrom')
+				.form(
+						'submit',
+						{
+							async : false,
+							url : "REST/REST/Misc/recvMessage/"
+									+ $j("#phone").textbox("getValue")
+									+ "/"
+									+ $j("#x").val() + "/" + $j("#y").val(),
+							onSubmit : function() {
+								return $j("#sendextracefrom").form('validate');
+							},
+							success : function(data) {
+								alert(data);
+								if (data == "success") {
+									$j.messager.alert("提示", $j("#name").val()
+											+ ",您好!请您保持手机连通,我们会尽快上门取件.");
+								} else {
+									$j.messager.alert("提示", "预约失败!");
+								}
+								$j("#sendextracefrom").form("clear");
+								$j("#weight").numberspinner("setValue", "1.0");
+								$j("#name").focus();
+
+							}
+						});
+	}
+</script>
+<title>寄发快件</title>
+</head>
+<body style="font-size: 14px;">
+	<form id="sendextracefrom" method="get">
+		<label>请填写寄件信息:</label><br /> <br />
+		<table>
+			<tr>
+				<td>姓名:</td>
+				<td><input class="easyui-textbox" type="text" name="name"
+					id="name" style="height: 30px; width: 200px;"
+					data-options="required:true,validType:'name',prompt:'请输入姓名'"></input></td>
+				<td rowspan="6"><div id="map"
+						style="width: 690px; height: 350px;"></div>
+					<div id="r-result">
+						搜索:<input type="text" id="suggestId" size="20" value="百度"
+							style="width: 150px;" />
+					</div>
+					<div id="searchResultPanel"
+						style="border: 1px solid #C0C0C0; width: 230px; height: auto; display: none;"></div>
+				</td>
+
+			</tr>
+			<tr>
+				<td>手机号:</td>
+				<td><input class="easyui-textbox" type="text" name="phone"
+					id="phone" style="height: 30px; width: 200px;"
+					data-options="required:true,validType:'mobile',prompt:'请输入您的手机号'"></input></td>
+			</tr>
+			<tr>
+				<td nowrap="nowrap">地址:</td>
+				<td><input class="easyui-textbox" type="text" name="address"
+					id="address1"
+					data-options="required:true,editable:false,validType:'unnormal',prompt:'请在右边地图点击您所在的位置'"
+					style="height: 30px; width: 200px;"></input></td>
+
+			</tr>
+
+			<tr>
+				<td nowrap="nowrap">详细地址:</td>
+				<td><input class="easyui-textbox" type="text" name="address"
+					id="address2"
+					data-options="required:true,validType:'unnormal',prompt:'请填写街道号以及详细地址'"
+					style="height: 30px; width: 200px;"></input></td>
+			</tr>
+			<tr>
+				<td nowrap="nowrap">重量(kg):</td>
+				<td><input id="weight" class="easyui-numberspinner"
+					style="width: 200px; height: 30px;" value="1.0"
+					data-options="increment:0.5,precision:1,editable:false,min:0.5"></td>
+
+			</tr>
+			<tr>
+				<td>备注:</td>
+				<td><input class="easyui-textbox" type="text" name="remark"
+					id="remark"
+					data-options="multiline:true,prompt:'若您的物品体积大但不重，请在这里注明.'"
+					style="height: 60px; width: 200px;"></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center"><button type="button"
+						onclick="submitForm()"
+						style="background-color: #EB1D21; width: 150px; height: 30px;">预约</button></td>
+			</tr>
+			<tr>
+				<td><input type="hidden" name="x" id="x" value=""></input></td>
+				<td><input type="hidden" name="y" id="y" value=""></input></td>
+			</tr>
+		</table>
+	</form>
+	<script type="text/javascript">
+		var map;
+		var $j = jQuery.noConflict();
+		$j(function() {
+
+			map = new BMap.Map("map");
+			var point = new BMap.Point(116.331398, 39.897445);
+			map.centerAndZoom(point, 15);
+			map.enableScrollWheelZoom(); //启用滚轮放大缩小，默认禁用
+			map.enableContinuousZoom();
+			var gc = new BMap.Geocoder();
+
+			var geolocation = new BMap.Geolocation();
+			geolocation.getCurrentPosition(function(r) {
+				if (this.getStatus() == BMAP_STATUS_SUCCESS) {
+					var mk = new BMap.Marker(r.point);
+					map.addOverlay(mk);
+					map.panTo(r.point);
+					//alert('您的位置：'+r.point.lng+','+r.point.lat);
+				} else {
+					alert('failed' + this.getStatus());
+				}
+			}, {
+				enableHighAccuracy : true
+			});
+			map.addEventListener("click", showInfo);
+			function showInfo(e) {
+				//alert(e.point.lng + ", " + e.point.lat);
+				$j("#x").attr("value", e.point.lng);
+				//alert($j("#x").attr("value"));
+				$j("#y").attr("value", e.point.lat);
+				//alert($j("#y").attr("value"));
+				getLoac(e);
+			}
+			function getLoac(e) {
+				gc.getLocation(new BMap.Point(e.point.lng, e.point.lat),
+						function(rs) {
+							var addComp = rs.addressComponents;
+							alert(addComp.province + ", " + addComp.city + ", "
+									+ addComp.district + ", " + addComp.street
+									+ ", " + addComp.streetNumber);
+							$j("#address1").textbox(
+									"setValue",
+									addComp.province + "" + addComp.city
+											+ addComp.district + addComp.street
+											+ addComp.streetNumber);
+						});
+			}
+
+			//------------------------
+			var ac = new BMap.Autocomplete( //建立一个自动完成的对象
+			{
+				"input" : "suggestId",
+				"location" : map
+			});
+
+			ac.addEventListener("onhighlight", function(e) { //鼠标放在下拉列表上的事件
+				var str = "";
+				var _value = e.fromitem.value;
+				var value = "";
+				if (e.fromitem.index > -1) {
+					value = _value.province + _value.city + _value.district
+							+ _value.street + _value.business;
+				}
+				str = "FromItem<br />index = " + e.fromitem.index
+						+ "<br />value = " + value;
+
+				value = "";
+				if (e.toitem.index > -1) {
+					_value = e.toitem.value;
+					value = _value.province + _value.city + _value.district
+							+ _value.street + _value.business;
+				}
+				str += "<br />ToItem<br />index = " + e.toitem.index
+						+ "<br />value = " + value;
+				$j("#searchResultPanel").innerHTML = str;
+			});
+
+			var myValue;
+			ac.addEventListener("onconfirm", function(e) { //鼠标点击下拉列表后的事件
+				var _value = e.item.value;
+				myValue = _value.province + _value.city + _value.district
+						+ _value.street + _value.business;
+				$j("#searchResultPanel").innerHTML = "onconfirm<br />index = "
+						+ e.item.index + "<br />myValue = " + myValue;
+
+				setPlace();
+			});
+
+			function setPlace() {
+				map.clearOverlays(); //清除地图上所有覆盖物
+				function myFun() {
+					var pp = local.getResults().getPoi(0).point; //获取第一个智能搜索的结果
+					map.centerAndZoom(pp, 18);
+					map.addOverlay(new BMap.Marker(pp)); //添加标注
+				}
+				var local = new BMap.LocalSearch(map, { //智能搜索
+					onSearchComplete : myFun
+				});
+				local.search(myValue);
+			}
+		});
+	</script>
+</body>
+</html>

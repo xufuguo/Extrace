@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css"
+	href="../jquery-easyui-1.4.5/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css"
+	href="../jquery-easyui-1.4.5/themes/icon.css">
+<link rel="stylesheet" type="text/css"
+	href="../jquery-easyui-1.4.5/demo/demo.css">
+<script type="text/javascript"
+	src="../jquery-easyui-1.4.5/jquery.min.js"></script>
+<script type="text/javascript"
+	src="../jquery-easyui-1.4.5/jquery.easyui.min.js"></script>
+<script type="text/javascript"
+	src="../jquery-easyui-1.4.5/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../js/send.js"></script>
+<script type="text/javascript">
+	function submitForm() {
+		$('#searchform').form('submit', {
+			type : "POST",
+			async : false,
+			url : "REST/REST/Misc/doLogin",
+			onSubmit : function(param) {
+				/* param.key1 = "value1";
+				param.key2 = "value2"; */
+				return $("#searchform").form('validate');
+			},
+			success : function(data) {
+				$.messager.alert("提示", "信息已发送，请查收！");
+				$("#searchform").form("clear");
+			}
+		});
+	}
+</script>
+<title>快递查询</title>
+</head>
+<body style="font-size: 14px;">
+	<form id="searchform" method="post">
+		<label>快递查询:</label><br />
+		<br />
+		<table>
+			<tr>
+				<td>手机号:</td>
+				<td><input class="easyui-textbox" type="text" name="tel"
+					id="tel" autofocus="autofocus" id="name"
+					style="height: 26px; width: 200px;"
+					data-options="required:true,validType:'mobile',prompt:'请输入手机号码'"></input></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center"><button type="button"
+						onclick="submitForm()"
+						style="background-color: #EB1D21; width: 120px; height: 30px;margin-top: 7px;">查询</button></td>
+			</tr>
+		</table>
+	</form>
+</body>
+</html>

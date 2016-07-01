@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>转运节点</title>
+<link rel="stylesheet" type="text/css" href="jquery-easyui-1.4.5/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="jquery-easyui-1.4.5/themes/icon.css">
+
+<script type="text/javascript" src="jquery-easyui-1.4.5/jquery.min.js"></script>
+<script type="text/javascript" src="jquery-easyui-1.4.5/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="jquery-easyui-1.4.5/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="jquery-easyui-1.4.5/jquery.easyui.mobile.js"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=78f9UcOm8vtUMbdxP4ZqibRcBKy9lrS2"></script>
+<style type="text/css">
+	html,body{
+		width: 100%;
+    	height:100%;
+    	margin: 0 auto;
+	}
+	
+</style>
+<script type="text/javascript">
+    
+// 下拉框选择控件，下拉框的内容是动态查询数据库信息,插入到邮政编码中
+ var $j = jQuery.noConflict();
+ $j(function(){
+	$j('#s_province').combobox({ 
+	    //url:"./json/region.json",
+	    url:'REST/REST/Misc/getProvinceList',
+	    method:"GET",
+	    editable:false, //不可编辑状态
+	    cache: false,
+	    // panelHeight: 'auto',//自动高度适合
+	    valueField:'Code',   
+	    textField:'Name',
+	    
+	    onHidePanel: function() {
+	        $j('#s_city').combobox('setValue','');
+	        $j('#s_county').combobox('setValue','');
+	        var province = $j('#s_province').combobox('getValue');
+	        //alert(province);
+	        if(province!=''){
+	            $j.ajax({
+	                type: 'GET',
+	                url: 'REST/REST/Misc/getCityList/'+province,
+	                cache: false,
+	                dataType : 'json',
+	                success: function(data){
+	                    //alert("aaaa");
+	                    //alert(data);
+	                    $j('#s_city').combobox('loadData',data);
+	                     
+	                }
+	            });     
+	        }
+	    } 
+
+	});
+
+	$j('#s_city').combobox({ 
+
+	    editable:false, //不可编辑状态
+	    cache: false,
+	    //panelHeight: 'auto',//自动高度适合
+	    valueField:'Code',   
+	    textField:'Name',
+	    onHidePanel: function(){
+	        $j('#s_county').combobox('setValue','');
+	        var city = $j('#s_city').combobox('getValue');
+	        //alert("211");
+	        //alert(city);       
+	        if(city!=''){
+	            $j.ajax({
+	                type: 'GET',
+	                url: 'REST/REST/Misc/getTownList/'+city,
+	                cache: false,
+	                dataType : 'json',
+	                success: function(data){
+	                    //alert("111");
+	                    $j("#s_county").combobox("loadData",data);
+	                }
+	            });     
+	        }else{
+	        	alert($j('#regioncode').textbox('getValue'));
+	        	$j('#regioncode').textbox('clear');
+	        }
+	    }
+	});  
+
+	$j('#s_county').combobox({ 
+	   
+	    editable:false, //不可编辑状态
+	    cache: false,
+	    // panelHeight: 'auto',//自动高度适合
+	    valueField:'Code',   
+	    textField:'Name',
+	    onHidePanel: function(){
+	    	var county = $j('#s_county').combobox('getValue');       
+	        if(county!=''){
+	           
+	           $j('#regioncode').textbox('setValue',county);
+	        }else{
+	           $j('#regioncode').textbox('clear');
+	        }
+	    }
+	}); 
+	
+	$j('#nodetype').combobox(
+			{
+				editable:false, //不可编辑状态
+			});
+
+});
+
+</script>
+
+</head>
+<body >
+  	<div  id="addtran"  style="width:100%;height:100%">
+    <input type="hidden" id="hidden_html" name="hidden_html"/>
+    <div  region="center" class="easyui-panel"  title="添加节点" style="width:100%;height:100%" >
+    	<form id="addtransnode" name="addtransnode" method="GET">
+	    	<table align="center" style="width:100%;height:100%">
+          		<tr>
+          			<td rowspan="2">
+            			<table cellpadding="5" align="center">
+					    		<tr>
+					    			<td>转运节点ID:</td>
+					    			<td><input class="easyui-textbox" data-options="required:true" type="text" name="transnodeid" id="transnodeid" ></input></td>
+					    		</tr>
+					    		<tr>
+					    			<td>转运节点名字:</td>
+					    			<td><input class="easyui-textbox" type="text" name="nodename" id="nodename" data-options="required:true"></input></td>
+					    		</tr>
+					    		<tr>
+					    			<td>转运节点类型:</td>
+					    			<td><input class="easyui-combobox" type="text" name="nodetype" id="nodetype" data-options="required:true,
+										valueField: 'label',
+										textField: 'value',
+										data: [{
+											label: '0',
+											value: '重要节点'
+										},{
+											label: '1',
+											value: '不重要节点'
+										}]" ></input></td>
+					    		</tr>
+					    		<tr>
+					    			<td>联系电话:</td>
+					    			<td><input class="easyui-textbox" type="text" name="telcode" id="telcode" data-options="required:true"></input></td>
+					    		</tr>
+					    		<tr>
+					    			<td>省:</td>	    			  
+				  					<td><input class="easyui-textbox"  data-options="required:true" id="s_province" ></td>  
+				  				</tr>
+				  				<tr>  
+				  					<td>市:</td>	       
+				  					<td><input class="easyui-textbox" data-options="required:true" id="s_city" ></td>	
+				  			    </tr>  
+				  			    <tr>    
+				  					<td>县区:</td>   
+				  					<td><input class="easyui-textbox"  data-options="required:true" id="s_county"  ></td>
+				  					
+					    	    </tr>
+					    	    <tr>
+					    			<td>邮政编码:</td>
+					    			<td><input class="easyui-textbox" type="text" name="regioncode" id="regioncode" readonly="readonly"></input></td>
+					    		</tr>
+					    </table>    
+	    	            <input  id="x" name="x" type="hidden"></input>
+	    	            <input  id="y" name="y" type="hidden"></input>
+          			    <div id="aaa" ></div>
+          			    <input class="easyui-textbox" type="text"  id="address"
+										data-options="required:true,multiline:true,editable:false,validType:'unnormal',prompt:'请在右边地图点击您所在的位置'"
+									    style="height: 80px; width: 280px;" ></input>
+                        <div style="text-align:center;padding:5px">
+	    					<a id="save" name="save" href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="save()">Save</a>
+	    	
+	                    </div>
+
+          			</td>
+          			
+          		
+          			<td>
+          			   <div id="container" style="width:800px; height: 500px; "></div>
+          			   
+          			</td>
+          			
+          		</tr>
+          	</table>
+	   	</form>
+	    
+	</div>
+  	</div>
+  
+<script type="text/javascript" src="js/addTrans.js"></script>
+<script type="text/javascript">
+//表单提交
+function save(){
+		var transnodeid=$j('#transnodeid').textbox('getValue');
+		var nodename=$j('#nodename').textbox('getValue');
+		//alert(nodename);
+		var nodetype=$j('#nodetype').combobox('getValue');
+		
+		//alert(nodetype);
+		var telcode=$j('#telcode').textbox('getValue');
+		var regioncode=$j('#regioncode').textbox('getValue');
+		var x=$j('#x').val();
+		var y=$j('#y').val();
+		//alert(x);
+		$j('#addtransnode').form('submit', {
+			
+			url: "REST/REST/Misc/saveNode/"+transnodeid+"/"+nodename+"/"+nodetype+"/"+telcode+"/"+regioncode+"/"+x+"/"+y,
+			onSubmit: function(){
+				//alert("liushuo123");
+				
+				var province=$j("#s_province").textbox("getText");
+				var city=$j("#s_city").textbox("getText");
+				var county=$j("#s_county").textbox("getText");
+				var addrstr=$j("#address").textbox("getValue");
+				var arr=addrstr.split(',');
+				if (arr[0].trim()==arr[1].trim()) {
+					city=arr[0].trim();
+				}
+				if (province!=arr[0].trim()) {	
+					$j.messager.alert("提示","省位置不符合,请重新选择！");
+					return false;
+				}else if (city!=arr[1].trim()) {
+						$j.messager.alert("提示","市位置不符合,请重新选择！");
+						return false;
+				}else if (county!=arr[2].trim()) {
+						$j.messager.alert("提示","县区位置不符合,请重新选择！");
+						return false;
+				}	
+				var isValid = $j(this).form('validate');
+				return isValid;	// 返回false终止表单提交
+			},
+			success: function(data){
+				$j.messager.progress('close');	// 如果提交成功则隐藏进度条
+				//alert(data);
+				if(data=="unsucc"){
+				 		$j.messager.alert('提示','该id被注册过');
+		             } 
+			 	if(data=="succ"){
+			 		  $j.messager.alert('提示','添加节点成功');
+	             } 
+
+				//alert("liushuo");
+				//alert(data);
+			}
+		});
+
+
+	}
+
+</script>
+ 
+</body>
+</html>

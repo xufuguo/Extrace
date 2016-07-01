@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>addpkg</title>
+<link rel="stylesheet" type="text/css" href="jquery-easyui-1.4.5/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="jquery-easyui-1.4.5/themes/icon.css">
+<!-- <link rel="stylesheet" type="text/css" href="jquery-easyui-1.4.5/themes/metro/easyui.css">
+<link rel="stylesheet" type="text/css" href="jquery-easyui-1.4.5/themes/mobile.css"> -->
+<script type="text/javascript" src="jquery-easyui-1.4.5/jquery.min.js"></script>
+<script type="text/javascript" src="jquery-easyui-1.4.5/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="jquery-easyui-1.4.5/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="jquery-easyui-1.4.5/jquery.easyui.mobile.js"></script>
+<script type="text/javascript" src="js/addPkg.js"></script>
+<style type="text/css">
+	html,body{
+		width: 100%;
+    	height:100%;
+    	margin: 0 auto;
+	}
+</style>
+
+</head>
+<body >
+  <div  id="addpkg" style="width:100%;height:100%">
+    <input type="hidden" id="hidden_html" name="hidden_html"/>
+    <div region="center" class="easyui-panel" style="width:100%">
+		<form id="apkg"  method="POST" >
+			<div  id="user" region="center" class="easyui-panel" title="选择负责人" collapsible="true"  width="100%">
+			    <table cellpadding="1" align="center">
+				    <td>负责人:</td>
+	    			<td><input class="easyui-textbox" type="text" name="name" id="name" data-options="required:true"></input>
+	    		    </td>
+	    		</table>
+	    	</div>	
+		    <div  id="p1" region="center" class="easyui-panel" title="揽收包裹" collapsible="true"      width="100%" >
+		    	<table cellpadding="4" align="center">
+		    		<tr>
+		    			<td>包裹ID:</td>
+		    			<td><input class="easyui-textbox" type="text" name="pkgid1" id="pkgid1" readonly="true"></input></td>
+		    		</tr>
+		    		<tr>
+		    			<td>(出发地)省:</td>	    			  
+	  					<td><input class="easyui-textbox" name="s_province1"  id="s_province1" ></td>    
+	  					<td>市:</td>	       
+	  					<td><input class="easyui-textbox" name="s_city1" id="s_city1" ></td>	      
+	  					<td>县区:</td>   
+	  					<td><input class="easyui-textbox" name="s_county1"  id="s_county1" ></td>
+	  					<td>转运中心:</td>   
+	  					<td><input class="easyui-textbox" name="s_node1"  id="s_node1" data-options="required:true"></td>
+		    		</tr>
+		    		<tr>
+		    			<td>(目的地)省:</td>
+		    			<td><input class="easyui-textbox" name="d_province1"  id="d_province1" ></td>    
+	  					<td>市:</td>	       
+	  					<td><input class="easyui-textbox" name="d_city1" id="d_city1" ></td>	      
+	  					<td>县区:</td>   
+	  					<td><input class="easyui-textbox" name="d_county1"  id="d_county1" ></td>
+	  					<td>转运中心:</td>   
+	  					<td><input class="easyui-textbox" name="d_node1"  id="d_node1" data-options="required:true" ></td>
+		    		</tr>
+		    		
+		    		<tr>
+		    			<td>包裹类型:</td>
+		    			<td><input class="easyui-textbox" name="pkgtype1"  id="pkgtype1" value="揽收包裹" readonly="true" ></td>
+		    		</tr>
+		    		<tr>
+		    			<td>创建时间:</td>
+		    			<td><input class="easyui-textbox" type="text" name="time1" id="time1" readonly="true"></input></td>
+		    		</tr>
+		    	</table>
+	    	</div>
+
+
+	    	<div id="p2" region="center" class="easyui-panel" title="转运包裹" collapsible="true" width="100%">
+		    	<table cellpadding="4" align="center">
+		    		<tr>
+		    			<td>包裹ID:</td>
+		    			<td><input class="easyui-textbox" type="text" name="pkgid2" id="pkgid2" readonly="true"></input></td>
+		    		</tr>
+		    		<tr>
+		    			<td>(出发地)省:</td>	    			  
+	  					<td><input class="easyui-textbox" name="s_province2"  id="s_province2" ></td>    
+	  					<td>市:</td>	       
+	  					<td><input class="easyui-textbox" name="s_city2" id="s_city2" ></td>	      
+	  					<td>县区:</td>   
+	  					<td><input class="easyui-textbox" name="s_county2"  id="s_county2" ></td>
+	  					<td>转运中心:</td>   
+	  					<td><input class="easyui-textbox" name="s_node2"  id="s_node2" data-options="required:true" ></td>
+		    		</tr>
+		    		<tr>
+		    			<td>(目的地)省:</td>
+		    			<td><input class="easyui-textbox" name="d_province2"  id="d_province2" ></td>    
+	  					<td>市:</td>	       
+	  					<td><input class="easyui-textbox" name="d_city2" id="d_city2" ></td>	      
+	  					<td>县区:</td>   
+	  					<td><input class="easyui-textbox" name="d_county2"  id="d_county2" ></td>
+	  					<td>转运中心:</td>   
+	  					<td><input class="easyui-textbox" name="d_node2"  id="d_node2" data-options="required:true"></td>
+		    		</tr>
+		    		
+		    		<tr>
+		    			<td>包裹类型:</td>
+		    			<td><input class="easyui-textbox" name="pkgtype2"  id="pkgtype2" value="转运包裹" readonly="true" ></td>
+		    		</tr>
+		    		<tr>
+		    			<td>创建时间:</td>
+		    			<td><input class="easyui-textbox" type="text" name="time2" id="time2" readonly="true"></input></td>
+		    		</tr>
+		    	</table>
+	    	</div>
+
+	    	<div id="p3"  region="center" class="easyui-panel" title="派送包裹" collapsible="true" width="100%">
+		    	<table cellpadding="4" align="center">
+		    		<tr>
+		    			<td>包裹ID:</td>
+		    			<td><input class="easyui-textbox" type="text" name="pkgid3" id="pkgid3" readonly="true"></input></td>
+		    		</tr>
+		    		<tr>
+		    			<td>(出发地)省:</td>	    			  
+	  					<td><input class="easyui-textbox" name="s_province3"  id="s_province3" ></td>    
+	  					<td>市:</td>	       
+	  					<td><input class="easyui-textbox" name="s_city3" id="s_city3" ></td>	      
+	  					<td>县区:</td>   
+	  					<td><input class="easyui-textbox" name="s_county3"  id="s_county3" ></td>
+	  					<td>转运中心:</td>   
+	  					<td><input class="easyui-textbox" name="s_node3"  id="s_node3" data-options="required:true"></td>
+		    		</tr>
+		    		<tr>
+		    			<td>(目的地)省:</td>
+		    			<td><input class="easyui-textbox" name="d_province3"  id="d_province3" ></td>    
+	  					<td>市:</td>	       
+	  					<td><input class="easyui-textbox" name="d_city3" id="d_city3" ></td>	      
+	  					<td>县区:</td>   
+	  					<td><input class="easyui-textbox" name="d_county3"  id="d_county3" ></td>
+	  					<td>转运中心:</td>   
+	  					<td><input class="easyui-textbox" name="d_node3"  id="d_node3" data-options="required:true" ></td>
+		    		</tr>
+		    		
+		    		<tr>
+		    			<td>包裹类型:</td>
+		    			<td><input class="easyui-textbox" name="pkgtype3"  id="pkgtype3" value="派送包裹" readonly="true" ></td>
+		    		</tr>
+		    		<tr>
+		    			<td>创建时间:</td>
+		    			<td><input class="easyui-textbox" type="text" name="time3" id="time3" readonly="true"></input></td>
+		    		</tr>
+		    	</table>
+	    	</div>
+
+	    </form>
+	    <div style="text-align:center;padding:5px" width="100%">
+	    	<a href="javascript:void(0)" class="easyui-linkbutton" iconCls:'icon-ok'"  onclick="submitForm()">创建</a>
+	    	<a href="javascript:void(0)" class="easyui-linkbutton" onclick="resetForm()">重置</a>
+	    </div>
+	</div>
+  </div>	
+</body>
+</html>

@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css"
+	href="jquery-easyui-1.4.5/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css"
+	href="jquery-easyui-1.4.5/themes/icon.css">
+<link rel="stylesheet" type="text/css"
+	href="jquery-easyui-1.4.5/demo/demo.css">
+<script type="text/javascript" src="jquery-easyui-1.4.5/jquery.min.js"></script>
+<script type="text/javascript"
+	src="jquery-easyui-1.4.5/jquery.easyui.min.js"></script>
+<script type="text/javascript"
+	src="jquery-easyui-1.4.5/locale/easyui-lang-zh_CN.js"></script>
+<link rel="stylesheet" href="css/myindex.css" type="text/css" />
+<script type="text/javascript">
+	$(function() {
+		$('#query').click(function() {
+			$("#sendchild").hide();
+			$("#send").css("background", "#1D95DD");
+			$("#mychild").hide();
+			$("#my").css("background", "#1D95DD");
+			$("#querychild").show();
+			$(this).css("background", "#F8F8F8");
+		});
+		$('#send').click(function() {
+			$("#querychild").hide();
+			$("#query").css("background", "#1D95DD");
+			$("#mychild").hide();
+			$("#my").css("background", "#1D95DD");
+			$("#sendchild").show();
+			$(this).css("background", "#F8F8F8");
+		});
+		$('#my').click(function() {
+			$("#sendchild").hide();
+			$("#send").css("background", "#1D95DD");
+			$("#querychild").hide();
+			$("#query").css("background", "#1D95DD");
+			$("#mychild").show();
+			$(this).css("background", "#F8F8F8");
+		});
+	});
+</script>
+<style>
+</style>
+<title>卓越快递</title>
+</head>
+<body>
+	<div
+		style="background-image: url('image/myheader.png'); background-repeat: no-repeat; height: 120px;">
+		<div
+			style="FONT-SIZE: 20pt; WIDTH: 100%; COLOR: #FFFFFF; LINE-HEIGHT: 150%; FONT-FAMILY: 华文行楷">
+			<strong>卓越快递</strong>
+		</div>
+		<div style="margin: 60px 260px auto;">
+			<label style="font-style: italic; font-size: 12px;">查快递 寄快递</label>
+		</div>
+	</div>
+	<div class="nav">
+		<ul>
+			<li class="cur" id="query"><a href="#">快递查询</a></li>
+			<li id="send"><a href="#">预约寄件</a></li>
+			<li id="my"><a href="#">我的快递</a></li>
+		</ul>
+		<div class="curBg"></div>
+		<div class="cls"></div>
+	</div>
+	<div style="background-color: #F8F8F8">
+		<div style="float: left; margin: 5px 20px auto;">
+			<img alt="卓越快递下载" src="image/myapp.png" width="100px" height="100px">
+			<div style="FONT-SIZE: 9pt; margin-left: 25px; FONT-FAMILY: 华文行楷">
+				<strong>下载卓越APP</strong>
+			</div>
+		</div>
+		<div class="child" id="querychild"
+			style="display: inherit; width: 980px; margin: 0 auto; position: relative; padding: 0 20px; text-align: center;">
+			<iframe id="queryframe" scrolling="no"
+				style="width: 980px; height: 550px; margin-left: 245px;"
+				class="myframe" src="extracequery.html" frameborder="0">
+			</iframe>
+		</div>
+
+		<div class="child" id="sendchild"
+			style="display: none; width: 980px; margin: 0 auto; position: relative; padding: 0 20px; text-align: center;">
+			<iframe id="queryframe" scrolling="no"
+				style="width: 980px; height: 550px; margin-left: 180px;"
+				class="myframe" src="sendextrace.html" frameborder="0">
+			</iframe>
+		</div>
+		<div class="child" id="mychild"
+			style="display: none; width: 980px; margin: 0 auto; position: relative; padding: 0 20px; text-align: center;">
+			<iframe id="myframe" scrolling="no"
+				style="width: 980px; height: 550px; margin-left: 180px;"
+				class="myframe" src="jsp/login.html" frameborder="0"> </iframe>
+		</div>
+	</div>
+	<div style="bottom: 45px; width: 90%; text-align: center;">
+		版权所有@:<strong>郑州大学卓越 开发小组</strong>&nbsp;&nbsp;&nbsp;
+		地址:郑州大学信息工程学院3302室&nbsp;&nbsp;&nbsp;电话:1314520
+	</div>
+</body>
+</html>

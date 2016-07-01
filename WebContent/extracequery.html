@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css"
+	href="jquery-easyui-1.4.5/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css"
+	href="jquery-easyui-1.4.5/themes/icon.css">
+<link rel="stylesheet" type="text/css"
+	href="jquery-easyui-1.4.5/demo/demo.css">
+<script type="text/javascript"
+	src="jquery-easyui-1.4.5/jquery.min.js"></script>
+<script type="text/javascript"
+	src="jquery-easyui-1.4.5/jquery.easyui.min.js"></script>
+<script type="text/javascript"
+	src="jquery-easyui-1.4.5/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="js/send.js"></script>
+<script>
+	$(function() {
+		$('#searchcontent').searchbox().next('span').find('input').focus();
+	});
+	function doSearch(value) {
+		$('#search')
+				.form(
+						'submit',
+						{
+							type : "GET",
+							async : false,
+							url : "REST/REST/Domain/getWebHistory/"+value,
+							onSubmit : function() {
+								if (!isNaN(value) && !value.length == 0) {
+									return true;
+								} else {
+									$("#search").form("clear");
+									$("#searchcontent").focus();
+									return false;
+								}
+								return $("#search").form('validate');
+							},
+							success : function(data) {
+								$('#dg').datagrid({
+									async:false,
+									data : eval(data),
+									columns : [[ 
+									{field : 'time',title : '时间',width : 200,align:'center'},
+									{field : 'address',title : '网点',width : 200,align:'center'},
+									{field : 'nameFrom',title : '状态',width : 100,align:'center'},
+									{field : 'nameTo',title : '转运站',width : 100,align:'center'}
+									]]
+								});
+								$("#prompt").hide();
+								$("#divimg").css("display","inline");
+								$("#image").attr("src","userdata/"+value+".jpg");
+							}
+						});
+	}
+</script>
+<title>快递查询</title>
+</head>
+<body style="font-size: 14px;">
+	<form action="MyServlet" method="get" id="search">
+		<label>快递查询:</label><br /> <br />
+		<input class="easyui-searchbox" id="searchcontent" name="searchcontent"
+			autofocus="autofocus"
+			data-options="prompt:'请输入要查询的快递号',searcher:doSearch,required:true,validType:'integer'"
+			style="width: 300px; height: 28px;"></input>
+
+	</form>
+	<div id="prompt" style="margin-top: 5px; margin-left: 5px;">例如,您可以输入:976186294981</div>
+	<div style="height: 12px;"></div>
+	<div style="float: left;"><table id="dg" style="width:602px;"></table></div>
+	<div style="float:left;display:none;" id="divimg"><img id="image"  alt="无揽件拍照" style="width:200px;height:300px;margin: 0 12px auto" src=""></img></div>
+	
+</body>
+</html>
